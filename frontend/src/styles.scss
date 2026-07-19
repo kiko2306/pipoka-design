@@ -1,0 +1,50 @@
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; }
+button, input, textarea { font: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid #c26143; outline-offset: 3px; }
+.lightbox { align-items: center; background: rgba(13, 23, 27, .93); display: flex; inset: 0; justify-content: center; padding: 3rem; position: fixed; z-index: 20; }
+.lightbox img { max-height: 90vh; max-width: 90vw; object-fit: contain; }
+.lightbox button { background: none; border: 0; color: white; cursor: pointer; font-size: 2.5rem; min-height: 44px; min-width: 44px; position: absolute; right: 1.5rem; top: .5rem; }
+.admin-toast { background: var(--ink); box-shadow: 0 12px 30px rgba(0, 0, 0, .18); color: var(--paper); font-size: .86rem; max-width: min(420px, calc(100vw - 2.5rem)); padding: 1rem 1.2rem; position: fixed; right: 1.25rem; top: 5.5rem; z-index: 30; }
+
+.image-dialog-backdrop { background: rgba(13, 23, 27, .88); inset: 0; overflow-y: auto; padding: clamp(1rem, 5vw, 4rem); position: fixed; z-index: 21; }
+.image-dialog { background: var(--paper); color: var(--ink); margin: 0 auto; max-width: 1120px; min-height: 100%; padding: clamp(1rem, 4vw, 3rem); position: relative; }
+.image-dialog > img { display: block; max-height: 65vh; object-fit: contain; width: 100%; }
+.dialog-close { background: none; border: 0; color: var(--ink); cursor: pointer; float: right; font-size: 2.5rem; min-height: 44px; min-width: 44px; position: sticky; top: 0; z-index: 1; }
+.image-dialog-copy { margin: 1.5rem auto 0; max-width: 720px; }
+.image-dialog-copy h2 { font-family: Georgia, serif; font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 400; letter-spacing: -.055em; margin: .75rem 0 1.25rem; }
+.rating-panel, .comments-panel { border-top: 1px solid var(--line); margin-top: 2rem; padding-top: 1rem; }
+.star-buttons { display: flex; gap: .25rem; }
+.star-buttons button { background: transparent; border: 0; color: var(--mist); cursor: pointer; font-size: 2rem; min-height: 44px; min-width: 44px; padding: 0; }
+.star-buttons button.selected { color: var(--silt); }
+.comment-list { border-top: 1px solid var(--line); margin-top: 1.5rem; }
+.public-comment { border-bottom: 1px solid var(--line); padding: 1rem 0; }
+.public-comment p { line-height: 1.5; margin: 0 0 .5rem; }
+.public-comment time { color: color-mix(in srgb, var(--ink) 65%, transparent); font-family: ui-monospace, monospace; font-size: .65rem; margin-left: .5rem; text-transform: uppercase; }
+.comment-status { color: var(--silt); font-family: ui-monospace, monospace; font-size: .65rem; letter-spacing: .05em; margin-left: .5rem; text-transform: uppercase; }
+.action-error { color: var(--silt); font-size: .9rem; line-height: 1.45; margin: .75rem 0 0; }
+.public-comment .text-button { background: transparent; border: 1px solid var(--line); color: var(--ink); cursor: pointer; font-size: .65rem; letter-spacing: .05em; margin: 0 .35rem .35rem 0; min-height: 36px; padding: .4rem .5rem; text-transform: uppercase; }
+.file-upload-field { display: grid; font-family: ui-monospace, monospace; font-size: .68rem; gap: .55rem; letter-spacing: .08em; text-transform: uppercase; }
+.file-input { block-size: 1px; clip-path: inset(50%); inline-size: 1px; overflow: hidden; position: absolute; white-space: nowrap; }
+.file-upload-button { align-items: center; background: var(--ink); border: 1px solid var(--ink); color: var(--paper); cursor: pointer; display: inline-flex; justify-content: center; letter-spacing: .07em; min-height: 48px; padding: .75rem 1rem; transition: background .2s, border-color .2s, color .2s; width: fit-content; }
+.file-upload-button:hover { background: var(--silt); border-color: var(--silt); color: #102126; }
+.file-input:focus-visible + .file-upload-button { outline: 2px solid var(--silt); outline-offset: 3px; }
+.file-upload-hint { color: color-mix(in srgb, var(--ink) 68%, transparent); font-size: .62rem; letter-spacing: .05em; }
+.confirmation-backdrop { align-items: center; background: rgba(5, 12, 15, .76); display: flex; inset: 0; justify-content: center; padding: 1.25rem; position: fixed; z-index: 40; }
+.confirmation-dialog { background: var(--paper); border: 1px solid var(--line); box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, .35); color: var(--ink); max-width: 32rem; padding: clamp(1.5rem, 5vw, 2.5rem); width: 100%; }
+.confirmation-dialog h2 { font-family: Georgia, serif; font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 400; letter-spacing: -.055em; line-height: .95; margin: .75rem 0 1rem; }
+.confirmation-dialog > p:not(.eyebrow) { line-height: 1.5; margin: 0; }
+.confirmation-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+.confirmation-actions .danger-button { background: var(--danger-background, #a64930); border-color: var(--danger-background, #a64930); color: var(--danger-ink, #fff); }
+.confirmation-actions .text-button { margin: 0; }
+
+@media (max-width: 700px) {
+  .image-dialog-backdrop { padding: 0; }
+  .image-dialog { padding: 1rem; }
+  .image-dialog > img { max-height: 50vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}

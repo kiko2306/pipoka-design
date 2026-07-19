@@ -1,0 +1,372 @@
+@if (isAdmin()) {
+  <main class="admin-shell" [attr.inert]="deleteConfirmation() ? '' : null">
+    <header class="admin-header">
+      <a class="wordmark" href="/">Pipoka<span>.</span></a>
+      <p>Painel de gestão</p>
+      @if (token()) {
+        <button type="button" class="theme-button" (click)="logout()">Terminar sessão</button>
+      }
+    </header>
+    @if (adminMessage()) {
+      <div class="admin-toast" role="status">{{ adminMessage() }}</div>
+    }
+
+    @if (!token()) {
+      <section class="admin-login">
+        <p class="eyebrow">Acesso de administrador</p>
+        <h1>Gira o<br><em>arquivo.</em></h1>
+        <form (ngSubmit)="login()" #loginForm="ngForm">
+          <label>Email <input name="email" type="email" required [(ngModel)]="loginEmail" autocomplete="email"></label>
+          <label>Palavra-passe <input name="password" type="password" required [(ngModel)]="loginPassword" autocomplete="current-password"></label>
+          <button type="submit" [disabled]="loginForm.invalid">Entrar →</button>
+        </form>
+      </section>
+    } @else {
+      <section class="admin-intro">
+        <p class="eyebrow">Painel</p>
+        <h1>Mantenha o trabalho<br><em>em movimento.</em></h1>
+        <p>Publique coleções, carregue imagens e mantenha todos os textos da página atualizados.</p>
+      </section>
+
+      <section class="admin-grid">
+        <article class="admin-card">
+          <p class="eyebrow">Coleções</p>
+          <form (ngSubmit)="saveCollection()" #collectionForm="ngForm">
+            <label>Título <input name="collectionTitle" required [(ngModel)]="collectionTitle"></label>
+            <label>Descrição <textarea name="collectionDescription" required rows="4" [(ngModel)]="collectionDescription"></textarea></label>
+            <label class="checkbox-label"><input type="checkbox" name="collectionPublished" [(ngModel)]="collectionPublished"> Publicar agora</label>
+            <button type="submit" [disabled]="collectionForm.invalid">{{ editingCollectionId ? 'Guardar alterações →' : 'Guardar coleção →' }}</button>
+            @if (editingCollectionId) {
+              <button type="button" class="text-button" (click)="cancelEdit()">Cancelar edição</button>
+            }
+          </form>
+          <div class="admin-list">
+            @for (collection of adminCollections(); track collection.id; let index = $index) {
+              <div class="collection-row">
+                <p><strong>{{ collection.title }}</strong><span>{{ collection.isPublished ? 'Publicada' : 'Rascunho' }}</span></p>
+                <div>
+                  <button type="button" class="text-button" (click)="moveCollection(index, -1)" [disabled]="index === 0">Subir</button>
+                  <button type="button" class="text-button" (click)="moveCollection(index, 1)" [disabled]="index === adminCollections().length - 1">Descer</button>
+                  <button type="button" class="text-button" (click)="previewCollection(collection)">Ver imagens</button>
+                  <button type="button" class="text-button" (click)="editCollection(collection)">Editar</button>
+                  <button type="button" class="danger-button" (click)="requestCollectionDeletion(collection, $event)">Remover</button>
+                </div>
+              </div>
+            } @empty {
+              <p>Ainda não existem coleções. Crie a primeira acima.</p>
+            }
+          </div>
+          @if (previewCollectionTitle()) {
+            <section class="collection-preview" aria-live="polite">
+              <div class="preview-heading">
+                <p class="eyebrow">Imagens em {{ previewCollectionTitle() }}</p>
+                <button type="button" class="text-button" (click)="closeCollectionPreview()">Fechar</button>
+              </div>
+              <div class="image-preview-grid">
+                @for (image of collectionImages(); track image.id) {
+                  <figure>
+                    <img [src]="image.filePath" [alt]="image.altText" loading="lazy">
+                    <figcaption>
+                      <span>{{ image.title }} · {{ image.isPublished ? 'Publicada' : 'Rascunho' }}</span>
+                      <button type="button" class="danger-button" (click)="requestImageDeletion(image, $event)">Remover</button>
+                    </figcaption>
+                  </figure>
+                } @empty {
+                  <p>Esta coleção ainda não tem imagens.</p>
+                }
+              </div>
+            </section>
+          }
+        </article>
+
+        <article class="admin-card">
+          <p class="eyebrow">Carregar imagens</p>
+          <form (ngSubmit)="uploadImages(uploadInput)" #uploadForm="ngForm">
+            <label>Coleção
+              <select name="uploadCollection" required [(ngModel)]="uploadCollectionId">
+                <option value="" disabled>Selecione uma coleção</option>
+                @for (collection of adminCollections(); track collection.id) {
+                  <option [value]="collection.id">{{ collection.title }}</option>
+                }
+              </select>
+            </label>
+            <span class="file-upload-field">
+              <span>Ficheiros de imagem</span>
+              <input #uploadInput id="upload-images" class="file-input" type="file" multiple accept="image/jpeg,image/png,image/webp,image/gif" required (change)="selectUploadFile($event)">
+              <label class="file-upload-button" for="upload-images">Escolher ficheiros</label>
+              <span class="file-upload-hint">{{ uploadFiles.length ? uploadFiles.length + ' ficheiro(s) selecionado(s)' : 'Nenhum ficheiro selecionado' }}</span>
+            </span>
+            <label>Título da imagem <input name="uploadTitle" [(ngModel)]="uploadTitle"></label>
+            <label>Texto alternativo <input name="uploadAltText" [(ngModel)]="uploadAltText"></label>
+            <label>Descrição <textarea name="uploadDescription" rows="3" [(ngModel)]="uploadDescription"></textarea></label>
+            <label class="checkbox-label"><input type="checkbox" name="uploadPublished" [(ngModel)]="uploadPublished"> Publicar após carregar</label>
+            <button type="submit" [disabled]="uploadForm.invalid">Carregar imagens →</button>
+          </form>
+        </article>
+
+        <article class="admin-card">
+          <p class="eyebrow">Identidade do site</p>
+          <form (ngSubmit)="saveIdentity()" #identityForm="ngForm">
+            <label>Título <input name="siteTitle" required [(ngModel)]="siteTitle"></label>
+            <label>Subtítulo <input name="siteSubtitle" required [(ngModel)]="siteSubtitle"></label>
+            <button type="submit" [disabled]="identityForm.invalid">Guardar identidade →</button>
+          </form>
+        </article>
+
+        <article class="admin-card content-card">
+          <p class="eyebrow">Textos da página</p>
+          <form (ngSubmit)="saveHomepage()" #homepageFormRef="ngForm">
+            <h2>Arquivo</h2>
+            <label>Etiqueta <input name="workEyebrow" required [(ngModel)]="homepageForm.workEyebrow"></label>
+            <label>Título <textarea name="workHeadline" required rows="3" [(ngModel)]="homepageForm.workHeadline"></textarea></label>
+            <h2>Sobre</h2>
+            <label>Etiqueta <input name="aboutEyebrow" required [(ngModel)]="homepageForm.aboutEyebrow"></label>
+            <label>Título <textarea name="aboutHeadline" required rows="4" [(ngModel)]="homepageForm.aboutHeadline"></textarea></label>
+            <label>Detalhe <textarea name="aboutDetail" required rows="4" [(ngModel)]="homepageForm.aboutDetail"></textarea></label>
+            <h2>Contacto</h2>
+            <label>Etiqueta <input name="contactEyebrow" required [(ngModel)]="homepageForm.contactEyebrow"></label>
+            <label>Título <textarea name="contactHeadline" required rows="3" [(ngModel)]="homepageForm.contactHeadline"></textarea></label>
+            <label>Detalhe <textarea name="contactDetail" required rows="3" [(ngModel)]="homepageForm.contactDetail"></textarea></label>
+            <button type="submit" [disabled]="homepageFormRef.invalid">Guardar textos →</button>
+          </form>
+        </article>
+
+        <article class="admin-card">
+          <p class="eyebrow">Moderação</p>
+          <div class="admin-list">
+            @for (comment of pendingComments(); track comment.id) {
+              <div class="comment-row">
+                <p><strong>{{ comment.authorName }}</strong> em {{ comment.imageTitle }}</p>
+                <p>{{ comment.body }}</p>
+                <button type="button" (click)="moderateComment(comment.id, 'approved')">Aprovar</button>
+                <button type="button" class="text-button" (click)="moderateComment(comment.id, 'rejected')">Rejeitar</button>
+              </div>
+            } @empty {
+              <p>Não existem comentários pendentes.</p>
+            }
+          </div>
+        </article>
+
+        <article class="admin-card inbox-card">
+          <p class="eyebrow">Caixa de entrada</p>
+          <div class="admin-list">
+            @for (message of contactSubmissions(); track message.id) {
+              <div class="comment-row">
+                <p><strong>{{ message.name }}</strong> · {{ message.email }}</p>
+                <p>{{ message.message }}</p>
+              </div>
+            } @empty {
+              <p>Ainda não existem mensagens de contacto.</p>
+            }
+          </div>
+        </article>
+      </section>
+    }
+  </main>
+} @else {
+  <main [class.night]="darkMode()" [attr.inert]="deleteConfirmation() ? '' : null">
+    <header class="site-header">
+      <a class="wordmark" href="#top" [attr.aria-label]="displaySiteTitle() + ' home'">{{ displaySiteTitle() }}<span>.</span></a>
+      <button class="menu-button" type="button" (click)="toggleMobileNav()" [attr.aria-expanded]="mobileNavOpen()" aria-controls="primary-nav">Menu</button>
+      <nav id="primary-nav" aria-label="Primary navigation" [class.open]="mobileNavOpen()">
+        <a href="#work" (click)="closeMobileNav()">Work</a>
+        <a href="#about" (click)="closeMobileNav()">About</a>
+        <a href="#contact" (click)="closeMobileNav()">Contact</a>
+        <a href="/admin">Admin</a>
+      </nav>
+      <button class="theme-button" type="button" (click)="toggleTheme()">
+        {{ darkMode() ? 'Light room' : 'Dark room' }}
+      </button>
+    </header>
+
+    <section class="hero" id="top">
+      <p class="eyebrow">Image portfolio</p>
+      <h1>{{ displaySiteSubtitle() }}</h1>
+      <div class="hero-footer">
+        <p>A collection of observed places, small weather, and the intervals between things.</p>
+        <a href="#work" class="arrow-link">Enter the archive <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section class="work-section" id="work" aria-labelledby="work-title">
+      <div class="section-heading">
+        <p class="eyebrow">{{ homepage().workEyebrow }}</p>
+        <h2 id="work-title">{{ homepage().workHeadline }}</h2>
+      </div>
+      <div class="collection-list">
+        @for (collection of collections(); track collection.slug; let index = $index) {
+          <article class="collection" [style.--delay]="index">
+            @if (collection.image) {
+              <button type="button" class="image-button" (click)="openImage(collection.image)">
+                <img [src]="collection.image" [alt]="collection.title" loading="lazy">
+                <span class="view-label">Open image ↗</span>
+              </button>
+            } @else {
+              <div class="collection-placeholder" aria-hidden="true">No cover image yet</div>
+            }
+            <div class="collection-copy">
+              <p class="collection-index">0{{ index + 1 }}</p>
+              <h3>{{ collection.title }}</h3>
+              <p>{{ collection.note }}</p>
+              <button type="button" class="collection-link" (click)="openPublicCollection(collection.slug)">View collection <span aria-hidden="true">↗</span></button>
+            </div>
+          </article>
+        } @empty {
+          <p class="empty-state">No published collections yet.</p>
+        }
+      </div>
+
+    </section>
+
+    <section class="about-section" id="about">
+      <p class="eyebrow">{{ homepage().aboutEyebrow }}</p>
+      <div>
+        <p class="about-statement">{{ homepage().aboutHeadline }}</p>
+        <p class="about-detail">{{ homepage().aboutDetail }}</p>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <div>
+        <p class="eyebrow">{{ homepage().contactEyebrow }}</p>
+        <h2>{{ homepage().contactHeadline }}</h2>
+        <p>{{ homepage().contactDetail }}</p>
+      </div>
+      <form (ngSubmit)="sendContact()" #contactForm="ngForm">
+        <label>Your name <input name="name" required [(ngModel)]="contactName" autocomplete="name"></label>
+        <label>Email <input name="email" type="email" required [(ngModel)]="contactEmail" autocomplete="email"></label>
+        <label>What would you like to make? <textarea name="message" required [(ngModel)]="contactMessage" rows="3"></textarea></label>
+        <button type="submit" [disabled]="contactForm.invalid">{{ contactSent() ? 'Message received' : 'Send message →' }}</button>
+        @if (contactError()) { <p class="action-error" role="alert">{{ contactError() }}</p> }
+      </form>
+    </section>
+
+    <footer>
+      <p>© 2026 Pipoka</p>
+      <p>Made for slow looking.</p>
+    </footer>
+
+    @if (selected()) {
+      <div class="lightbox" role="dialog" aria-modal="true" aria-label="Selected portfolio image" (click)="closeImage()">
+        <button type="button" aria-label="Close image" (click)="closeImage()">×</button>
+        <img [src]="selected()" alt="Selected portfolio work">
+      </div>
+    }
+
+    @if (publicCollectionTitle() || publicCollectionError()) {
+      <div class="collection-dialog-backdrop" role="presentation" (click)="closePublicCollection()">
+        <section class="collection-dialog" role="dialog" aria-modal="true" [attr.aria-label]="publicCollectionTitle() || 'Collection'" (click)="$event.stopPropagation()">
+          <button type="button" class="dialog-close" (click)="closePublicCollection()" aria-label="Close collection">×</button>
+          @if (publicCollectionTitle()) {
+            <div class="gallery-heading">
+              <div>
+                <p class="eyebrow">Collection</p>
+                <h3>{{ publicCollectionTitle() }}</h3>
+              </div>
+              <label>Sort images
+                <select [ngModel]="publicSort" (ngModelChange)="changePublicSort($event)">
+                  <option value="date">Newest first</option>
+                  <option value="popularity">Most popular</option>
+                </select>
+              </label>
+            </div>
+            <div class="public-image-grid">
+              @for (image of publicCollectionImages(); track image.id) {
+                <article class="public-image-card">
+                  <button type="button" (click)="openPublicImage(image.id)">
+                    <img [src]="image.filePath" [alt]="image.altText" loading="lazy">
+                    <span>{{ image.title }}</span>
+                  </button>
+                  <p>{{ image.averageRating || 0 | number:'1.1-1' }} / 5 · {{ image.ratingCount }} ratings</p>
+                </article>
+              } @empty {
+                <p class="empty-state">This collection has no published images yet.</p>
+              }
+            </div>
+          } @else {
+            <p class="action-error" role="alert">{{ publicCollectionError() }}</p>
+          }
+        </section>
+      </div>
+    }
+
+    @if (selectedPublicImage(); as image) {
+      <div class="image-dialog-backdrop" role="presentation">
+        <section class="image-dialog" role="dialog" aria-modal="true" [attr.aria-label]="image.title">
+          <button type="button" class="dialog-close" (click)="closePublicImage()" aria-label="Close image details">×</button>
+          <img [src]="image.filePath" [alt]="image.altText">
+          <div class="image-dialog-copy">
+            <p class="eyebrow">{{ image.collectionTitle }}</p>
+            <h2>{{ image.title }}</h2>
+            @if (image.description) { <p>{{ image.description }}</p> }
+            @if (imageActionError()) { <p class="action-error" role="alert">{{ imageActionError() }}</p> }
+            <section class="rating-panel" aria-label="Rate this image">
+              <p><strong>{{ image.averageRating || 0 | number:'1.1-1' }} / 5</strong> from {{ image.ratingCount }} ratings</p>
+              <div class="star-buttons">
+                @for (star of [1, 2, 3, 4, 5]; track star) {
+                  <button type="button" [class.selected]="star <= image.visitorRating" (click)="ratePublicImage(star)" [attr.aria-label]="'Rate ' + star + ' out of 5 stars'">★</button>
+                }
+              </div>
+            </section>
+            <section class="comments-panel">
+              <p class="eyebrow">Comments</p>
+              <form (ngSubmit)="submitComment()" #commentForm="ngForm">
+                <label>Name <input name="commentAuthorName" required minlength="2" [(ngModel)]="commentAuthorName"></label>
+                <label>Comment <textarea name="commentBody" required minlength="2" [(ngModel)]="commentBody" rows="3"></textarea></label>
+                <button type="submit" [disabled]="commentForm.invalid">Post comment</button>
+              </form>
+              <div class="comment-list">
+                @for (comment of image.comments ?? []; track comment.id) {
+                  <article class="public-comment">
+                    @if (editingCommentId === comment.id) {
+                      <form (ngSubmit)="saveCommentEdit()" #editCommentForm="ngForm">
+                        <label>Name <input name="editingCommentAuthorName" required minlength="2" [(ngModel)]="editingCommentAuthorName"></label>
+                        <label>Comment <textarea name="editingCommentBody" required minlength="2" [(ngModel)]="editingCommentBody" rows="3"></textarea></label>
+                        <button type="submit" [disabled]="editCommentForm.invalid">Save changes</button>
+                        <button type="button" class="text-button" (click)="cancelCommentEdit()">Cancel</button>
+                      </form>
+                    } @else {
+                      <p><strong>{{ comment.authorName }}</strong> <time>{{ comment.createdAt | date:'mediumDate' }}</time> @if (comment.isOwned && comment.status !== 'approved') { <span class="comment-status">Awaiting review</span> }</p>
+                      <p>{{ comment.body }}</p>
+                      @if (comment.isOwned) {
+                        <button type="button" class="text-button" (click)="startCommentEdit(comment)">Edit</button>
+                        <button type="button" class="text-button" (click)="requestCommentDeletion(comment.id, $event)">Delete</button>
+                      }
+                    }
+                  </article>
+                } @empty {
+                  <p class="empty-state">Be the first to leave a note.</p>
+                }
+              </div>
+            </section>
+          </div>
+        </section>
+      </div>
+    }
+  </main>
+
+}
+
+@if (deleteConfirmation(); as confirmation) {
+  <div class="confirmation-backdrop" (click)="cancelDeletion()">
+    <section class="confirmation-dialog" role="alertdialog" aria-modal="true" aria-labelledby="delete-confirmation-title" aria-describedby="delete-confirmation-description" (click)="$event.stopPropagation()" (keydown.escape)="cancelDeletion()" (keydown.tab)="keepDeletionFocus($event)">
+      <p class="eyebrow">{{ confirmation.type === 'comment' ? 'Confirmation required' : 'Confirmação necessária' }}</p>
+      <h2 id="delete-confirmation-title">
+        @if (confirmation.type === 'comment') { Delete this comment? } @else if (confirmation.type === 'collection') { Remover esta coleção? } @else { Remover esta imagem? }
+      </h2>
+      <p id="delete-confirmation-description">
+        @if (confirmation.type === 'collection') {
+          Vai remover "{{ confirmation.title }}" e todas as suas imagens. Esta ação não pode ser anulada.
+        } @else if (confirmation.type === 'image') {
+          Vai remover a imagem "{{ confirmation.title }}". Esta ação não pode ser anulada.
+        } @else {
+          This action cannot be undone.
+        }
+      </p>
+      <div class="confirmation-actions">
+        <button type="button" class="text-button" (click)="cancelDeletion()">{{ confirmation.type === 'comment' ? 'Cancel' : 'Cancelar' }}</button>
+        <button type="button" class="danger-button" (click)="confirmDeletion()">{{ confirmation.type === 'comment' ? 'Delete' : 'Remover' }}</button>
+      </div>
+    </section>
+  </div>
+}

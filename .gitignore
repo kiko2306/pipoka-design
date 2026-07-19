@@ -1,0 +1,6 @@
+.env
+api/dist/
+api/uploads/
+api/node_modules/
+frontend/dist/
+frontend/node_modules/
