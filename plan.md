@@ -12,6 +12,7 @@ Build a Dockerized portfolio platform from the supplied concept. The public Angu
 - An administrative area manages portfolio content, uploads, comment approval, contact messages, about text, and highly rated images.
 - The public site supports visitor-selectable light and dark modes.
 - Docker Compose runs the frontend, API, MySQL, persistent image storage, and Cloudflare Tunnel.
+- Docker builds must be reproducible with the repository Dockerfiles and documented host prerequisites.
 
 ## Confirmed product decisions
 
@@ -55,6 +56,7 @@ Build a Dockerized portfolio platform from the supplied concept. The public Angu
 
 ## Recently completed fixes
 
+- Docker startup troubleshooting repaired stale MySQL volume credentials without deleting data and moved the local frontend binding to port `8083` because ports `8080` and `8081` are already occupied on the host.
 - Image uploads validate actual file content, accept the sample JPEG fixtures reliably, and clean rejected files.
 - Delete actions use accessible themed confirmation dialogs instead of browser-native prompts.
 - Dark mode uses darker surfaces and lighter text for stronger contrast.
