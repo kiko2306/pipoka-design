@@ -27,8 +27,9 @@ Build a Dockerized portfolio platform from the supplied concept. The public Angu
 - **Frontend:** Angular SPA with responsive public, authentication, and protected admin routes.
 - **API:** Node.js with a modular Express/CommonJS structure, with validated REST endpoints and administrator authorization.
 - **Database:** MySQL schema and migrations for users, collections, images, ratings, comments, contact submissions, and site settings.
-- **Images:** Uploaded files stored in a mounted Docker volume; metadata stored in MySQL.
-- **Runtime:** Docker Compose services for frontend, API, MySQL, and `cloudflared`; health checks, environment configuration, and persistent volumes.
+- **Images:** Uploaded files stored in the local `api/uploads` bind mount; metadata stored in MySQL.
+- **Runtime:** Docker Compose services for frontend, API, MySQL, and `cloudflared`; health checks, environment configuration, and local bind mounts for persistent data.
+- **Deployment:** The production project directory is `/home/ubuntu/www/pipoka-design` on the configured Ubuntu server.
 
 ## Implementation steps
 
@@ -56,6 +57,10 @@ Build a Dockerized portfolio platform from the supplied concept. The public Angu
 
 ## Recently completed fixes
 
+- The Cloudflare Tunnel connector uses the current pinned `cloudflared` release, `2026.7.2`.
+- The Cloudflare Tunnel connector starts automatically with the default `docker compose up -d` command.
+- MySQL readiness requires TCP port `3306`, preventing the API from starting against MySQL's temporary initialization server.
+- Persistent uploads and MySQL data use local repository bind mounts at `api/uploads` and `database/data`.
 - Docker startup troubleshooting repaired stale MySQL volume credentials without deleting data and moved the local frontend binding to port `8083` because ports `8080` and `8081` are already occupied on the host.
 - Image uploads validate actual file content, accept the sample JPEG fixtures reliably, and clean rejected files.
 - Delete actions use accessible themed confirmation dialogs instead of browser-native prompts.

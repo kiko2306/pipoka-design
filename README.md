@@ -25,16 +25,16 @@ An image portfolio built with Angular, a modular Express API, MySQL, Docker Comp
 
 4. Open `http://localhost:8080`. The API health endpoint is available at `http://localhost:8080/api/health`.
 
-5. Stop the application with `docker compose down`. Add `-v` only when you intentionally want to remove the database and uploaded images.
+5. Stop the application with `docker compose down`. Persistent data remains in `database\data` and `api\uploads`.
 
 If port 8080 is already occupied, set `FRONTEND_PORT` in `.env` to a free value, such as `18080`, then use that port in the browser.
 
 ## Cloudflare Tunnel
 
-Create a remotely managed tunnel and route its public hostname to the `frontend` service using the Cloudflare dashboard. Place the tunnel token in `CLOUDFLARE_TUNNEL_TOKEN` in `.env`, then start the tunnel profile:
+Create a remotely managed tunnel and route its public hostname to the `frontend` service using the Cloudflare dashboard. Place the tunnel token in `CLOUDFLARE_TUNNEL_TOKEN` in `.env`. The connector starts with the default stack:
 
 ```powershell
-docker compose --profile tunnel up --build
+docker compose up --build
 ```
 
 The tunnel container does not publish the API directly. Requests to `/api` are proxied by the frontend container, keeping the API inside the Compose network.
@@ -89,7 +89,7 @@ cd frontend
 npm start
 ```
 
-The database schema is initialized from `database\init\001-schema.sql` only when the MySQL Docker volume is first created. For a clean local database, stop Compose and run `docker compose down -v` before starting it again.
+The database schema is initialized from `database\init\001-schema.sql` only when `database\data` is empty. To reset local persistent data, stop Compose, remove `database\data` and `api\uploads`, then start the application again.
 
 ## Upload test images
 
