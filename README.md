@@ -94,3 +94,8 @@ The database schema is initialized from `database\init\001-schema.sql` only when
 ## Upload test images
 
 JPEG fixtures for verifying the administrator image-upload flow are available in `sample-images/`. Use them from **/admin** after creating or selecting a collection. Upload validation inspects file content rather than relying on browser-provided MIME types or file extensions, and automatically derives title/alt text from the filename if those optional fields are empty.
+
+
+## TODO
+
+Add watchtower to update cloudflare
