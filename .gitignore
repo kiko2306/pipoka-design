@@ -5,3 +5,11 @@ api/node_modules/
 database/data/
 frontend/dist/
 frontend/node_modules/
+
+# secrets and local backups, never commit
+*.secret
+*.bak*
+*.bck
+*.sql
+*.sql.gz
+!database/init/*.sql
