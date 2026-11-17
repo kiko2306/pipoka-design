@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 # Publish to a server: pull the pushed branch and rebuild the changed services.
-# Usage: bash publish.sh <home|office|ptisp>   (commit and push first; .env and *.secret stay on the server)
+# Usage: bash publish.sh [home]   (always home; commit and push first; .env and *.secret stay on the server)
 # Targets and their data live in publish.env as <TARGET>_SSH_HOST, <TARGET>_PATH, <TARGET>_BRANCH, <TARGET>_PUBLIC_URL.
 set -euo pipefail
 cd "$(dirname "$0")"
 . ./publish.env
 
-target="${1:-}"
-case "$target" in home|office|ptisp) ;; *) echo "Usage: bash publish.sh <home|office|ptisp>" >&2; exit 2 ;; esac
-[ "$target" != ptisp ] || { echo "ptisp (FTP) is not set up for this project." >&2; exit 2; }
+target="${1:-home}"
+[ "$target" = home ] || { echo "This site only publishes to home. Usage: bash publish.sh [home]" >&2; exit 2; }
 
 T="$(echo "$target" | tr a-z A-Z)"
 get() { local k="${T}_$1"; [ -n "${!k:-}" ] || { echo "Missing $k in publish.env." >&2; exit 2; }; echo "${!k}"; }
