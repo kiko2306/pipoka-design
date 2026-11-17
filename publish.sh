@@ -14,7 +14,7 @@ T="$(echo "$target" | tr a-z A-Z)"
 get() { local k="${T}_$1"; [ -n "${!k:-}" ] || { echo "Missing $k in publish.env." >&2; exit 2; }; echo "${!k}"; }
 host=$(get SSH_HOST); path=$(get PATH); branch=$(get BRANCH); port=$(get FRONTEND_PORT)
 
-[ -z "$(git status --porcelain)" ] || { echo "Uncommitted changes. Commit and push first." >&2; exit 1; }
+[ -z "$(git status --porcelain --untracked-files=no)" ] || { echo "Uncommitted changes. Commit and push first." >&2; exit 1; }
 [ "$(git rev-parse HEAD)" = "$(git rev-parse "origin/$branch" 2>/dev/null)" ] || { echo "HEAD is not pushed to origin/$branch." >&2; exit 1; }
 
 if [ "$target" = office ]; then
