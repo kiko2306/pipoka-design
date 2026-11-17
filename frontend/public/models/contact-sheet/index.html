@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pipoka design · Contact Sheet</title>
+<meta name="description" content="Pipoka design: fashion and anatomy drawings, arranged as a contact sheet.">
+<link rel="stylesheet" href="sheet.css">
+<link rel="icon" type="image/png" sizes="128x128" href="/favicon.png">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+</head><body>
+<a class="skip" href="#work">Skip to content</a>
+<header class="bar">
+  <a class="badge" href="#top" aria-label="Pipoka design, top"><img src="/models/logo.webp" alt="pipoka design" width="56" height="56"></a>
+  <nav aria-label="Main"><a href="#work">Work</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
+</header>
+<main id="top">
+<section class="hero">
+  <p class="mono tag">Roll 01 · Drawings · Fashion + Anatomy</p>
+  <h1><span id="siteTitle">Pipoka</span> <em>design</em></h1>
+  <p class="lede" id="siteSubtitle">Fashion and anatomy drawings.</p>
+  <ol class="strip" id="heroStrip" aria-label="Preview frames"></ol>
+</section>
+
+<section id="work" class="sec">
+  <p class="mono tag" id="workEyebrow">Selected collections</p>
+  <h2 id="workHeadline">Two collections, drawn by hand.</h2>
+  <div id="collections" class="cols"><p class="note">Loading collections…</p></div>
+</section>
+
+<section id="gallery" class="sec">
+  <p class="mono tag">Full contact sheet</p>
+  <h2>All frames</h2>
+  <div id="sheet"><p class="note">Loading frames…</p></div>
+</section>
+
+<section id="about" class="sec about">
+  <div><p class="mono tag" id="aboutEyebrow">About</p>
+  <h2 id="aboutHeadline">Drawing the figure, one dress and one muscle at a time.</h2></div>
+  <p class="detail" id="aboutDetail">Pipoka design gathers fashion designs and freehand anatomical studies.</p>
+</section>
+
+<section id="contact" class="sec contact">
+  <div><p class="mono tag" id="contactEyebrow">Contact</p>
+  <h2 id="contactHeadline">Have an idea?</h2>
+  <p class="detail" id="contactDetail">For commissions or simply to say hello.</p></div>
+  <form id="form" novalidate>
+    <label>Name<input name="name" autocomplete="name" required></label>
+    <label>Email<input name="email" type="email" autocomplete="email" required></label>
+    <label>Message<textarea name="msg" rows="5" required></textarea></label>
+    <button type="submit">Send message</button>
+    <p id="formMsg" class="note" role="status"></p>
+  </form>
+</section>
+</main>
+<footer class="foot"><span class="mono">© <span id="yr"></span> Pipoka design</span><span class="mono">Frame <span id="total">0</span> · End of roll</span></footer>
+
+<dialog id="lb" aria-label="Image viewer"><button class="x" id="lbClose" aria-label="Close">×</button><img id="lbImg" alt=""><p class="mono" id="lbCap"></p></dialog>
+
+<script src="/models/data.js"></script>
+<script src="sheet.js"></script>
+</body></html>

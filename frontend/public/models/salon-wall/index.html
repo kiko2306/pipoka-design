@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pipoka design · Salon Wall</title>
+    <meta
+      name="description"
+      content="Pipoka design: fashion and anatomy drawings, hung as a salon wall."
+    />
+    <style>
+      :root {
+        --paper: #f6f1e7;
+        --paper2: #ece4d3;
+        --ink: #272f37;
+        --mut: #5b6068;
+        --gold: #c9a455;
+        --gold-d: #8a6b22;
+        --line: #d9cfba;
+        --frame: #fffdf8;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 5rem;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font:
+          17px/1.65 Georgia,
+          'Times New Roman',
+          serif;
+        overflow-x: hidden;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 3px solid var(--gold-d);
+        outline-offset: 3px;
+      }
+      .wrap {
+        width: min(1240px, 100% - 2rem);
+        margin-inline: auto;
+      }
+      .eyebrow {
+        font:
+          600 0.78rem/1 system-ui,
+          sans-serif;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--gold-d);
+        margin: 0 0 1rem;
+      }
+      h1,
+      h2 {
+        font-weight: 400;
+        line-height: 1.1;
+        margin: 0;
+        letter-spacing: -0.01em;
+        white-space: pre-line;
+      }
+      h2 {
+        font-size: clamp(1.9rem, 4.2vw, 3.2rem);
+      }
+
+      /* header */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: color-mix(in srgb, var(--paper) 92%, transparent);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--line);
+      }
+      header .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 4rem;
+        gap: 1rem;
+      }
+      .logo {
+        display: block;
+        line-height: 0;
+        min-width: 44px;
+        min-height: 44px;
+      }
+      .logo img {
+        height: 56px;
+        width: 56px;
+        mix-blend-mode: multiply;
+        margin-block: -4px;
+      }
+      nav {
+        display: flex;
+        gap: 0.25rem;
+      }
+      nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 0 0.9rem;
+        text-decoration: none;
+        font:
+          500 0.95rem system-ui,
+          sans-serif;
+        letter-spacing: 0.04em;
+        border-bottom: 2px solid transparent;
+        transition:
+          border-color 0.2s,
+          color 0.2s;
+      }
+      nav a:hover {
+        border-color: var(--gold);
+      }
+
+      /* hero */
+      .hero {
+        padding: clamp(2.5rem, 7vw, 6rem) 0 clamp(2rem, 4vw, 3rem);
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: 1fr;
+        align-items: center;
+      }
+      .hero h1 {
+        font-size: clamp(2.6rem, 8vw, 6rem);
+        font-style: italic;
+      }
+      .hero p.sub {
+        font-size: clamp(1.1rem, 2vw, 1.4rem);
+        color: var(--mut);
+        max-width: 32ch;
+        margin: 1.2rem 0 1.8rem;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 1.6rem;
+        background: var(--ink);
+        color: var(--paper);
+        border: 1px solid var(--ink);
+        font:
+          500 0.95rem system-ui,
+          sans-serif;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .btn:hover {
+        background: transparent;
+        color: var(--ink);
+      }
+      .hero-art {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        align-items: end;
+      }
+      .hero-art .f {
+        margin: 0;
+      }
+      .hero-art .f:nth-child(2) {
+        transform: translateY(1.5rem);
+      }
+      .hero-art:empty {
+        display: none;
+      }
+      @media (min-width: 860px) {
+        .hero {
+          grid-template-columns: 1.1fr 0.9fr;
+        }
+      }
+
+      /* frames */
+      .frame {
+        background: var(--frame);
+        padding: 0.55rem;
+        border: 1px solid var(--line);
+        box-shadow:
+          0 1px 0 #fff inset,
+          0 10px 24px -14px rgba(39, 47, 55, 0.45),
+          0 2px 4px rgba(39, 47, 55, 0.08);
+      }
+      .frame img {
+        width: 100%;
+        height: auto;
+        background: var(--paper2);
+      }
+
+      /* wall */
+      #work {
+        padding: clamp(3rem, 6vw, 5rem) 0;
+      }
+      .head {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: end;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .chip {
+        min-height: 44px;
+        padding: 0 1.1rem;
+        background: transparent;
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+        color: var(--ink);
+        font:
+          500 0.9rem system-ui,
+          sans-serif;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .chip:hover {
+        background: var(--paper2);
+      }
+      .chip[aria-pressed='true'] {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .desc {
+        color: var(--mut);
+        font-style: italic;
+        margin: 0 0 1.5rem;
+        min-height: 1.65em;
+      }
+      .wall {
+        column-count: var(--cols, 1);
+        column-gap: clamp(1rem, 2.5vw, 2rem);
+        max-width: var(--maxw, none);
+        margin-inline: auto;
+      }
+      @media (min-width: 640px) {
+        .wall {
+          --cols: min(var(--n, 2), 2);
+        }
+      }
+      @media (min-width: 1000px) {
+        .wall {
+          --cols: min(var(--n, 3), 3);
+        }
+      }
+      .wall .item {
+        break-inside: avoid;
+        margin: 0 0 clamp(1rem, 2.5vw, 2rem);
+        position: relative;
+        display: block;
+        width: 100%;
+        padding: 0;
+        border: 0;
+        background: none;
+        text-align: left;
+        font: inherit;
+        color: inherit;
+        cursor: zoom-in;
+      }
+      .wall .item:nth-child(3n + 2) .frame {
+        transform: rotate(0.4deg);
+      }
+      .wall .item:nth-child(3n) .frame {
+        transform: rotate(-0.35deg);
+      }
+      .item .frame {
+        transition:
+          transform 0.35s,
+          box-shadow 0.35s;
+        position: relative;
+        overflow: hidden;
+      }
+      .item:hover .frame,
+      .item:focus-visible .frame {
+        transform: translateY(-4px) rotate(0);
+        box-shadow: 0 18px 30px -16px rgba(39, 47, 55, 0.55);
+      }
+      .cap {
+        position: absolute;
+        inset: 0.55rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 1.2rem 1rem 0.9rem;
+        background: linear-gradient(
+          to top,
+          rgba(246, 241, 231, 0.97) 0,
+          rgba(246, 241, 231, 0.9) 45%,
+          rgba(246, 241, 231, 0) 100%
+        );
+        opacity: 0;
+        transform: translateY(8px);
+        transition:
+          opacity 0.3s,
+          transform 0.3s;
+        pointer-events: none;
+      }
+      .item:hover .cap,
+      .item:focus-visible .cap {
+        opacity: 1;
+        transform: none;
+      }
+      .cap b {
+        font-weight: 400;
+        font-size: 1.25rem;
+        font-style: italic;
+      }
+      .cap span {
+        font:
+          0.78rem system-ui,
+          sans-serif;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--gold-d);
+      }
+      @media (hover: none) {
+        .cap {
+          opacity: 1;
+          transform: none;
+          padding-top: 2rem;
+        }
+      }
+      .empty {
+        text-align: center;
+        color: var(--mut);
+        font-style: italic;
+        padding: 3rem 1rem;
+        border: 1px dashed var(--line);
+      }
+
+      /* lightbox */
+      dialog {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        max-width: 100vw;
+        max-height: 100vh;
+        width: 100%;
+        height: 100%;
+        color: var(--ink);
+      }
+      dialog::backdrop {
+        background: rgba(246, 241, 231, 0.96);
+      }
+      .lb {
+        height: 100%;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        place-items: center;
+        padding: 3.5rem 1rem 1rem;
+        gap: 1rem;
+      }
+      .lb .frame {
+        max-height: 100%;
+        display: flex;
+      }
+      .lb img {
+        max-height: calc(100vh - 11rem);
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+      }
+      .lb .meta {
+        text-align: center;
+      }
+      .lb .meta b {
+        font-weight: 400;
+        font-style: italic;
+        font-size: 1.4rem;
+        display: block;
+      }
+      .lb .meta span {
+        color: var(--mut);
+        font-size: 0.95rem;
+      }
+      .lbbtn {
+        position: fixed;
+        top: 0.75rem;
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0 1rem;
+        background: var(--ink);
+        color: var(--paper);
+        border: 0;
+        font:
+          500 0.9rem system-ui,
+          sans-serif;
+        cursor: pointer;
+      }
+      .lbbtn.x {
+        right: 0.75rem;
+      }
+      .lbbtn.p {
+        left: 0.75rem;
+      }
+      .lbbtn.n {
+        left: 5rem;
+      }
+      .lbbtn:hover {
+        background: var(--gold-d);
+      }
+
+      /* about */
+      #about {
+        background: var(--paper2);
+        padding: clamp(3rem, 7vw, 6rem) 0;
+      }
+      #about .wrap {
+        display: grid;
+        gap: 2rem;
+        max-width: 900px;
+      }
+      #about h2 {
+        font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+        font-style: italic;
+        white-space: normal;
+      }
+      #about p.d {
+        font-size: 1.1rem;
+        color: var(--mut);
+        margin: 0;
+        max-width: 60ch;
+      }
+
+      /* contact */
+      #contact {
+        padding: clamp(3rem, 7vw, 6rem) 0;
+      }
+      #contact .wrap {
+        display: grid;
+        gap: 2.5rem;
+      }
+      @media (min-width: 860px) {
+        #contact .wrap {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .cdetail {
+        color: var(--mut);
+        margin: 1.2rem 0 0;
+        max-width: 40ch;
+      }
+      form {
+        display: grid;
+        gap: 1.1rem;
+      }
+      label {
+        display: grid;
+        gap: 0.4rem;
+        font:
+          500 0.85rem system-ui,
+          sans-serif;
+        letter-spacing: 0.06em;
+      }
+      input,
+      textarea {
+        font:
+          1rem Georgia,
+          serif;
+        min-height: 48px;
+        padding: 0.7rem 0.9rem;
+        background: var(--frame);
+        border: 1px solid #8c8473;
+        color: var(--ink);
+        border-radius: 0;
+      }
+      textarea {
+        min-height: 9rem;
+        resize: vertical;
+      }
+      input:focus,
+      textarea:focus {
+        outline: 3px solid var(--gold-d);
+        outline-offset: 1px;
+      }
+      #fmsg {
+        margin: 0;
+        min-height: 1.5em;
+        color: var(--gold-d);
+        font-style: italic;
+      }
+      form .btn {
+        justify-self: start;
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 2rem 0;
+        color: var(--mut);
+        font-size: 0.9rem;
+      }
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      footer img {
+        height: 48px;
+        width: 48px;
+        mix-blend-mode: multiply;
+      }
+      footer a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          scroll-behavior: auto !important;
+          animation: none !important;
+        }
+        .item:hover .frame {
+          transform: none;
+        }
+      }
+    </style>
+  <link rel="icon" type="image/png" sizes="128x128" href="/favicon.png">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+</head>
+  <body>
+    <header>
+      <div class="wrap">
+        <a class="logo" href="#top" aria-label="Pipoka design, top"
+          ><img src="/models/logo.webp" width="56" height="56" alt="Pipoka design"
+        /></a>
+        <nav aria-label="Main">
+          <a href="#work">Work</a><a href="#about">About</a><a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="wrap hero" aria-labelledby="t">
+        <div>
+          <p class="eyebrow">Fashion &amp; anatomy drawing</p>
+          <h1 id="t">Pipoka</h1>
+          <p class="sub" id="sub">Images that make room to look.</p>
+          <a class="btn" href="#work">See the wall</a>
+        </div>
+        <div class="hero-art" id="heroart"></div>
+      </section>
+
+      <section id="work" class="wrap" aria-labelledby="wh">
+        <div class="head">
+          <div>
+            <p class="eyebrow" id="we">Selected collections</p>
+            <h2 id="wh">The archive is arranged by feeling, not category.</h2>
+          </div>
+          <div class="chips" id="chips" role="group" aria-label="Filter by collection"></div>
+        </div>
+        <p class="desc" id="desc" aria-live="polite"></p>
+        <div class="wall" id="wall"></div>
+      </section>
+
+      <section id="about" aria-labelledby="ah">
+        <div class="wrap">
+          <div>
+            <p class="eyebrow" id="ae">A little about me</p>
+            <h2 id="ah">Drawings of dresses and of the body beneath them.</h2>
+          </div>
+          <p class="d" id="ad">
+            Pipoka design gathers first dress designs and freehand anatomical drawings.
+          </p>
+        </div>
+      </section>
+
+      <section id="contact" aria-labelledby="ch">
+        <div class="wrap">
+          <div>
+            <p class="eyebrow" id="ce">Start a conversation</p>
+            <h2 id="ch">Have an idea that needs drawing?</h2>
+            <p class="cdetail" id="cd">
+              For commissions or simply to say hello, write a few lines.
+            </p>
+          </div>
+          <form id="form" novalidate>
+            <label>Name<input name="n" autocomplete="name" required /></label>
+            <label>Email<input name="e" type="email" autocomplete="email" required /></label>
+            <label>Message<textarea name="m" required></textarea></label>
+            <button class="btn" type="submit">Send message</button>
+            <p id="fmsg" role="status"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <img src="/models/logo.webp" width="48" height="48" alt="Pipoka design logo" />
+        <span
+          >&copy; <span id="yr"></span> <span id="fn">Pipoka</span> design. All drawings belong to
+          the artist.</span
+        >
+        <a href="#top">Back to top</a>
+      </div>
+    </footer>
+
+    <dialog id="lb" aria-label="Image viewer">
+      <button class="lbbtn p" id="lbp" aria-label="Previous image">Prev</button>
+      <button class="lbbtn n" id="lbn" aria-label="Next image">Next</button>
+      <button class="lbbtn x" id="lbx" aria-label="Close viewer">Close</button>
+      <div class="lb">
+        <div class="frame"><img id="lbi" alt="" /></div>
+        <div class="meta"><b id="lbt"></b><span id="lbc"></span></div>
+      </div>
+    </dialog>
+
+    <script src="/models/data.js"></script>
+    <script>
+      const set = (id, v) => {
+        const e = document.getElementById(id);
+        if (e && v) e.textContent = v;
+      };
+      const flat = (s) => (s || '').replace(/\n/g, ' ');
+      let imgs = [],
+        shown = [],
+        cur = 0,
+        opener = null;
+      const lb = $('#lb');
+
+      function mkImg(i, eager) {
+        const im = document.createElement('img');
+        im.src = i.filePath;
+        im.alt = i.altText || i.title || 'Drawing';
+        if (!eager) im.loading = 'lazy';
+        im.decoding = 'async';
+        return im;
+      }
+
+      function render(filter) {
+        const wall = $('#wall');
+        wall.replaceChildren();
+        shown = imgs.filter((i) => !filter || i.collection === filter);
+        wall.style.setProperty('--n', shown.length || 1);
+        // few images: cap width so two frames do not stretch absurdly
+        wall.style.setProperty('--maxw', shown.length < 3 ? shown.length * 420 + 'px' : 'none');
+        if (!shown.length) {
+          const p = document.createElement('p');
+          p.className = 'empty';
+          p.textContent = 'Nothing on this wall yet. New drawings are on their way.';
+          wall.append(p);
+          return;
+        }
+        shown.forEach((i, k) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'item';
+          b.setAttribute('aria-label', 'Open ' + (i.title || 'drawing') + ', ' + i.collection);
+          const f = document.createElement('div');
+          f.className = 'frame';
+          const im = mkImg(i, k < 3);
+          im.alt = '';
+          f.append(im);
+          const c = document.createElement('div');
+          c.className = 'cap';
+          c.setAttribute('aria-hidden', 'true');
+          const t = document.createElement('b');
+          t.textContent = i.title || 'Untitled';
+          const s = document.createElement('span');
+          s.textContent = i.collection;
+          c.append(t, s);
+          f.append(c);
+          b.append(f);
+          b.onclick = () => open(k, b);
+          wall.append(b);
+        });
+      }
+      function show(k) {
+        cur = (k + shown.length) % shown.length;
+        const i = shown[cur];
+        const im = $('#lbi');
+        im.src = i.filePath;
+        im.alt = i.altText || i.title || '';
+        $('#lbt').textContent = i.title || 'Untitled';
+        $('#lbc').textContent = i.collection;
+        const m = shown.length > 1;
+        $('#lbp').hidden = $('#lbn').hidden = !m;
+      }
+      function open(k, btn) {
+        opener = btn;
+        show(k);
+        lb.showModal();
+      }
+      $('#lbx').onclick = () => lb.close();
+      $('#lbp').onclick = () => show(cur - 1);
+      $('#lbn').onclick = () => show(cur + 1);
+      lb.addEventListener('click', (e) => {
+        if (e.target === lb) lb.close();
+      });
+      lb.addEventListener('close', () => opener && opener.focus());
+      lb.addEventListener('keydown', (e) => {
+        if (shown.length > 1) {
+          if (e.key === 'ArrowLeft') show(cur - 1);
+          if (e.key === 'ArrowRight') show(cur + 1);
+        }
+      });
+
+      function chips(cols) {
+        const box = $('#chips');
+        box.replaceChildren();
+        if (cols.length < 2) return;
+        const mk = (label, val, desc) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'chip';
+          b.textContent = label;
+          b.setAttribute('aria-pressed', String(val === null));
+          b.dataset.v = val ?? '';
+          b.onclick = () => {
+            box
+              .querySelectorAll('.chip')
+              .forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
+            render(val);
+            $('#desc').textContent = desc || '';
+          };
+          box.append(b);
+        };
+        mk('All', null, '');
+        cols.forEach((c) => mk(c.title + ' (' + c.images.length + ')', c.title, c.description));
+      }
+
+      $('#yr').textContent = new Date().getFullYear();
+      $('#form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const f = e.target,
+          m = $('#fmsg');
+        if (!f.checkValidity()) {
+          m.textContent = 'Please fill in your name, a valid email and a message.';
+          f.reportValidity();
+          return;
+        }
+        m.textContent = 'Thank you. This is a preview form, nothing was sent.';
+        f.reset();
+      });
+
+      loadSite()
+        .then(({ home, collections, images }) => {
+          imgs = images;
+          const h = home.homepage || {};
+          set('fn', home.siteTitle);
+          set('t', home.siteTitle);
+          set('sub', home.siteSubtitle);
+          set('we', h.workEyebrow);
+          set('wh', h.workHeadline);
+          set('ae', h.aboutEyebrow);
+          set('ah', h.aboutHeadline);
+          set('ad', h.aboutDetail);
+          set('ce', h.contactEyebrow);
+          set('ch', h.contactHeadline);
+          set('cd', h.contactDetail);
+          if (home.siteTitle) document.title = home.siteTitle + ' design · Salon Wall';
+          // hero: up to two framed pieces
+          const art = $('#heroart');
+          images.slice(0, 2).forEach((i) => {
+            const f = document.createElement('div');
+            f.className = 'frame f';
+            f.append(mkImg(i, true));
+            art.append(f);
+          });
+          chips(collections);
+          render(null);
+        })
+        .catch(() => {
+          const w = $('#wall');
+          w.style.setProperty('--n', 1);
+          const p = document.createElement('p');
+          p.className = 'empty';
+          p.textContent = 'The drawings could not be loaded right now. Please try again shortly.';
+          w.append(p);
+        });
+    </script>
+  </body>
+</html>
