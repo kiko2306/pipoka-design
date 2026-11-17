@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Publish to a server: pull the pushed branch and rebuild the changed services.
 # Usage: bash publish.sh <home|office|ptisp>   (commit and push first; .env and *.secret stay on the server)
-# Targets and their data live in publish.env as <TARGET>_SSH_HOST, <TARGET>_PATH, <TARGET>_BRANCH, <TARGET>_FRONTEND_PORT.
+# Targets and their data live in publish.env as <TARGET>_SSH_HOST, <TARGET>_PATH, <TARGET>_BRANCH, <TARGET>_PUBLIC_URL.
 set -euo pipefail
 cd "$(dirname "$0")"
 . ./publish.env
@@ -12,7 +12,7 @@ case "$target" in home|office|ptisp) ;; *) echo "Usage: bash publish.sh <home|of
 
 T="$(echo "$target" | tr a-z A-Z)"
 get() { local k="${T}_$1"; [ -n "${!k:-}" ] || { echo "Missing $k in publish.env." >&2; exit 2; }; echo "${!k}"; }
-host=$(get SSH_HOST); path=$(get PATH); branch=$(get BRANCH); port=$(get FRONTEND_PORT)
+host=$(get SSH_HOST); path=$(get PATH); branch=$(get BRANCH); url=$(get PUBLIC_URL)
 
 [ -z "$(git status --porcelain --untracked-files=no)" ] || { echo "Uncommitted changes. Commit and push first." >&2; exit 1; }
 [ "$(git rev-parse HEAD)" = "$(git rev-parse "origin/$branch" 2>/dev/null)" ] || { echo "HEAD is not pushed to origin/$branch." >&2; exit 1; }
@@ -23,4 +23,4 @@ if [ "$target" = office ]; then
 fi
 
 ssh -o BatchMode=yes "$host" "set -e; cd '$path'; git pull --ff-only origin '$branch'; docker compose up -d --build; docker compose ps"
-curl -fsS -o /dev/null -w "$target: frontend http %{http_code}\n" "http://$host:$port/" || echo "$target: LAN check failed (not on that LAN?)"
+curl -fsS -o /dev/null -w "$target: $url http %{http_code}\n" "$url/" || { echo "$target: health check failed for $url" >&2; exit 1; }
