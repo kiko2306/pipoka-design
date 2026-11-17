@@ -1,10 +1,10 @@
 :host {
-  --paper: #e9e6dc;
-  --ink: #1d2b32;
-  --mist: #b9c4bd;
-  --lake: #7da3ad;
-  --silt: #c26143;
-  --line: rgba(29, 43, 50, .25);
+  --paper: #f6f7f8;
+  --ink: #272f37;
+  --mist: #dde1e5;
+  --lake: #272f37;
+  --silt: #7d5f17;
+  --line: rgba(39, 47, 55, .22);
   background: var(--paper);
   color: var(--ink);
   display: block;
@@ -13,11 +13,12 @@
 
 * { box-sizing: border-box; }
 main { min-height: 100vh; transition: background .3s; }
-main.night { --paper: #091318; --ink: #f3f7f5; --mist: #87a3aa; --lake: #83aeb6; --silt: #ffad86; --danger-background: #ffad86; --danger-ink: #102126; --line: rgba(243, 247, 245, .36); }
+main.night { --paper: #12161c; --ink: #f2f3f4; --mist: #2a323b; --lake: #1b222a; --silt: #c9a455; --danger-background: #c9a455; --danger-ink: #12161c; --line: rgba(242, 243, 244, .28); }
 .site-header, .hero, .work-section, .about-section, .contact-section, footer { padding-left: clamp(1.25rem, 5vw, 5rem); padding-right: clamp(1.25rem, 5vw, 5rem); }
 .site-header { align-items: center; border-bottom: 1px solid var(--line); display: grid; gap: 1.5rem; grid-template-columns: 1fr auto auto; padding-bottom: 1.1rem; padding-top: 1.1rem; position: relative; }
-.wordmark { color: inherit; font-family: Georgia, serif; font-size: 1.75rem; text-decoration: none; }
-.wordmark span, em { color: var(--silt); }
+.wordmark { color: inherit; display: block; line-height: 0; text-decoration: none; }
+.wordmark img { background: #fff; border-radius: 8px; display: block; height: 56px; width: 56px; }
+em { color: var(--silt); }
 nav { display: flex; gap: clamp(1rem, 3vw, 3rem); }
 nav a, .theme-button, .arrow-link, .collection-link, .menu-button { color: inherit; font-size: .76rem; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }
 .theme-button, .menu-button { background: transparent; border: 0; cursor: pointer; min-height: 44px; padding: .25rem .5rem; }
@@ -60,8 +61,9 @@ h2 { font-size: clamp(2.4rem, 6vw, 5.25rem); line-height: .96; margin-top: 3rem;
 .collection-dialog { background: var(--paper); color: var(--ink); margin: 0 auto; max-width: 1120px; min-height: 100%; padding: clamp(1.5rem, 4vw, 3rem); position: relative; }
 .collection-dialog .gallery-heading { margin-right: 3rem; }
 
-.about-section { background: var(--lake); color: #102126; display: grid; gap: 2rem; grid-template-columns: .65fr 1.35fr; padding-bottom: 8rem; padding-top: 8rem; }
+.about-section { --silt: #c9a455; background: var(--lake); color: #f6f7f8; display: grid; gap: 2rem; grid-template-columns: .65fr 1.35fr; padding-bottom: 8rem; padding-top: 8rem; }
 .about-statement { font-family: Georgia, serif; font-size: clamp(2.1rem, 5vw, 4.7rem); letter-spacing: -.05em; line-height: .98; margin: 0; max-width: 19ch; }
+.about-section ::selection { background: #c9a455; color: #272f37; }
 .about-detail { font-size: 1.05rem; line-height: 1.45; margin: 2rem 0 0; max-width: 34ch; }
 .contact-section { display: grid; gap: clamp(3rem, 11vw, 12rem); grid-template-columns: 1fr 1fr; padding-bottom: 8rem; padding-top: 8rem; }
 .contact-section h2 { font-size: clamp(3rem, 5vw, 5rem); margin: 2rem 0; }

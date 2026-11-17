@@ -1,7 +1,7 @@
 @if (isAdmin()) {
   <main class="admin-shell" [attr.inert]="deleteConfirmation() ? '' : null">
     <header class="admin-header">
-      <a class="wordmark" href="/">Pipoka<span>.</span></a>
+      <a class="wordmark" href="/" aria-label="Pipoka design"><img src="logo.webp" alt="Pipoka design" width="56" height="56"></a>
       <p>Painel de gestão</p>
       @if (token()) {
         <button type="button" class="theme-button" (click)="logout()">Terminar sessão</button>
@@ -166,7 +166,7 @@
 } @else {
   <main [class.night]="darkMode()" [attr.inert]="deleteConfirmation() ? '' : null">
     <header class="site-header">
-      <a class="wordmark" href="#top" [attr.aria-label]="displaySiteTitle() + ' home'">{{ displaySiteTitle() }}<span>.</span></a>
+      <a class="wordmark" href="#top" [attr.aria-label]="displaySiteTitle() + ' home'"><img src="logo.webp" [alt]="displaySiteTitle()" width="56" height="56"></a>
       <button class="menu-button" type="button" (click)="toggleMobileNav()" [attr.aria-expanded]="mobileNavOpen()" aria-controls="primary-nav">Menu</button>
       <nav id="primary-nav" aria-label="Primary navigation" [class.open]="mobileNavOpen()">
         <a href="#work" (click)="closeMobileNav()">Work</a>
